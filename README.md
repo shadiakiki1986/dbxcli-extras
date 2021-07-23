@@ -17,7 +17,7 @@ dbxcli_sync [--verbose={0,1,2}] <localdir> <dbxdir>
 
 ## License
 
-WTFPL. Check [[LICENSE]]
+WTFPL. Check [LICENSE](LICENSE)
 
 
 ## Dev notes
