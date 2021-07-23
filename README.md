@@ -15,6 +15,10 @@ pip3 install git+ssh://git@github.com/shadiakiki1986/dbxcli-sync.git@v0.0.1
 dbxcli_sync [--verbose={0,1,2}] <localdir> <dbxdir>
 ```
 
+## License
+
+WTFPL. Check [[LICENSE]]
+
 
 ## Dev notes
 
