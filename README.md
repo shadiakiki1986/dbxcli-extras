@@ -5,6 +5,10 @@ dbxcli sync command that solves https://github.com/dropbox/dbxcli/issues/53
 
 ## Install
 
+First install [dbxcli](https://github.com/dropbox/dbxcli/)
+
+Then install this package:
+
 ```
 pip3 install git+ssh://git@github.com/shadiakiki1986/dbxcli-sync.git@v0.0.1
 ```
