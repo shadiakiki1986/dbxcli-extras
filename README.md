@@ -10,7 +10,7 @@ First install [dbxcli](https://github.com/dropbox/dbxcli/)
 Then install this package:
 
 ```
-pip3 install git+ssh://git@github.com/shadiakiki1986/dbxcli-sync.git@v0.0.1
+pip3 install git+https://github.com/shadiakiki1986/dbxcli-sync.git@v0.0.1
 ```
 
 ## Usage
