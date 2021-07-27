@@ -20,7 +20,9 @@ class DbxcliSync:
     filename_remote = filename_local.replace(self.localdir, self.dbxdir)
     #filename_remote = os.path.join(self.dbxdir, filename_remote)
 
-    c1_revs = ["dbxcli", "revs", filename_remote]
+    # Update: it turns out that revs still shows a non-zero result for deleted files,
+    # so using ls instead
+    c1_revs = ["dbxcli", "ls", filename_remote]
     if self.verbosity>=2: print(f"Command: {' '.join(c1_revs)}")
     r1 = my_run(c1_revs)
     if r1.returncode==0:

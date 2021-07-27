@@ -15,8 +15,10 @@ pip3 install git+https://github.com/shadiakiki1986/dbxcli-sync.git@v0.0.1
 
 ## Usage
 
+### sync
+
 ```
-dbxcli_sync sync [--verbose={0,1,2}] <localdir> <dbxdir>
+dbxcli_sync sync [--verbosity={0,1,2}] <localdir> <dbxdir>
 ```
 
 Examples
@@ -37,6 +39,18 @@ File already exists: icloud-roula-20210723/2014/07/23/IMG_0001.JPG
 Command: dbxcli revs /20210723 icloud downloaded/2014/07/23/IMG_0002.JPG
 File already exists: icloud-roula-20210723/2014/07/23/IMG_0002.JPG
 ```
+
+### getr
+
+```
+dbxcli_sync getr [--verbose] [--verify] <dbxdir> <localdir>
+```
+
+Examples
+
+```
+```
+
 
 ## License
 
