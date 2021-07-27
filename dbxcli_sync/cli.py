@@ -30,7 +30,7 @@ def getr(dbxdir, localdir, verify, verbose):
     Recursive get
     Solves https://github.com/dropbox/dbxcli/issues/60
     """
-    click.echo(dbxdir, localdir, verify, verbose)
+    print(dbxdir, localdir, verify, verbose)
     getr(dbxdir, localdir, verify, verbose)
 
 
