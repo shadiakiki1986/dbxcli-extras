@@ -23,7 +23,7 @@ dbxcli_sync sync [--verbosity={0,1,2}] <localdir> <dbxdir>
 dbxcli_sync getr [--verbosity={0,1,2}] [--verify] <dbxdir> <localdir>
 ```
 
-For examples, see the jupyter notebook at https://gist.github.com/shadiakiki1986/7c478d451a4221d464d7bcfd5fc6a914
+For examples, see [this jupyter notebook](https://gist.github.com/shadiakiki1986/7c478d451a4221d464d7bcfd5fc6a914)
 
 
 ## License
