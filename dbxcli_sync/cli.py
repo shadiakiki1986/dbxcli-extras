@@ -1,5 +1,5 @@
 from .sync import DbxcliSync
-from .getr import getr
+from .getr import DbxcliGetr
 import click
 
 @click.group()
@@ -30,8 +30,8 @@ def getr(dbxdir, localdir, verify, verbose):
     Recursive get
     Solves https://github.com/dropbox/dbxcli/issues/60
     """
-    print(dbxdir, localdir, verify, verbose)
-    getr(dbxdir, localdir, verify, verbose)
+    dcg = DbxcliGetr(verify, verbose)
+    dcg.getr(dbxdir, localdir)
 
 
 

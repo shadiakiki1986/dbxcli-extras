@@ -17,40 +17,45 @@ def md5(f):
   return(hasher.hexdigest())
 
 
-def get(remote, verbose):
-  dlproc = subprocess.run(["dbxcli", "get", remote], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-  if verbose:
-    try: 
-      count, order = re.compile('/(\S+)\s(\S+)').match(dlproc.stderr.decode('utf-8')).group(1, 2)
-      print("Downloaded " + remote +" "+ count + " " + order)
-    except Exception:
-      print("Downloaded " + remote)
+class DbxcliGetr:
+  def __init__(self, verify, verbose):
+    self.verify = verify
+    self.verbose = verbose
+
+  def _get(self, remote):
+    dlproc = subprocess.run(["dbxcli", "get", remote], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if self.verbose:
+      try: 
+        count, order = re.compile('/(\S+)\s(\S+)').match(dlproc.stderr.decode('utf-8')).group(1, 2)
+        print("Downloaded " + remote +" "+ count + " " + order)
+      except Exception:
+        print("Downloaded " + remote)
 
 
-def getr(remote, local, verify, verbose):
-  localcwd = os.getcwd()
-  os.chdir(local)
-  #print("cwd: " + os.getcwd())
-  regex = re.compile('^(\S+).*/(.+?)\s*$')
-  proc = subprocess.run(["dbxcli", "ls", "-l", remote], stdout=subprocess.PIPE)
-  lines = proc.stdout.decode('utf-8').splitlines()
-  for line in lines[1:]:
-    obj_id, obj_name = regex.match(line).group(1, 2)
-    if obj_id == "-":
-      os.mkdir(obj_name)
-      if verbose: print("Created " + remote+'/'+obj_name)
-      getr(remote+'/'+obj_name, obj_name, verify, verbose)
-    else:
-      if verify:
-        myhash=None
-        while True:
-          get(remote+'/'+obj_name, verbose)
-          chash = md5(obj_name)
-          if myhash == chash:
-            break
-          else:
-            myhash=chash
+  def getr(self, remote, local):
+    localcwd = os.getcwd()
+    os.chdir(local)
+    #print("cwd: " + os.getcwd())
+    regex = re.compile('^(\S+).*/(.+?)\s*$')
+    proc = subprocess.run(["dbxcli", "ls", "-l", remote], stdout=subprocess.PIPE)
+    lines = proc.stdout.decode('utf-8').splitlines()
+    for line in lines[1:]:
+      obj_id, obj_name = regex.match(line).group(1, 2)
+      if obj_id == "-":
+        os.mkdir(obj_name)
+        if self.verbose: print("Created " + remote+'/'+obj_name)
+        self.getr(remote+'/'+obj_name, obj_name)
       else:
-        get(remote+'/'+obj_name, verbose)
+        if self.verify:
+          myhash=None
+          while True:
+            self._get(remote+'/'+obj_name)
+            chash = md5(obj_name)
+            if myhash == chash:
+              break
+            else:
+              myhash=chash
+        else:
+          self._get(remote+'/'+obj_name)
 
-  os.chdir(localcwd)
+    os.chdir(localcwd)
