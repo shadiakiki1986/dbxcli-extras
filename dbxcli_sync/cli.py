@@ -24,13 +24,13 @@ def sync(localdir, dbxdir, verbosity):
 @click.argument('dbxdir', type=str)
 @click.argument('localdir', type=click.Path(exists=True))
 @click.option('--verify', is_flag=True, default=False, help="Verify downloads (download it several times)")
-@click.option('--verbose', is_flag=True, default=False, help="Be verbose")
-def getr(dbxdir, localdir, verify, verbose):
+@click.option('--verbosity', default=0, help="Verbosity level: 0, 1, 2")
+def getr(dbxdir, localdir, verify, verbosity):
     """
     Recursive get
     Solves https://github.com/dropbox/dbxcli/issues/60
     """
-    dcg = DbxcliGetr(verify, verbose)
+    dcg = DbxcliGetr(verify, verbosity)
     dcg.getr(dbxdir, localdir)
 
 

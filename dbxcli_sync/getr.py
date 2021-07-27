@@ -18,13 +18,15 @@ def md5(f):
 
 
 class DbxcliGetr:
-  def __init__(self, verify, verbose):
+  def __init__(self, verify, verbosity):
     self.verify = verify
-    self.verbose = verbose
+    self.verbosity = verbosity
 
   def _get(self, remote):
-    dlproc = subprocess.run(["dbxcli", "get", remote], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    if self.verbose:
+    dlcmd = ["dbxcli", "get", remote]
+    if self.verbosity>=2: print(dlcmd)
+    dlproc = subprocess.run(dlcmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if self.verbosity>=1:
       try: 
         count, order = re.compile('/(\S+)\s(\S+)').match(dlproc.stderr.decode('utf-8')).group(1, 2)
         print("Downloaded " + remote +" "+ count + " " + order)
@@ -37,13 +39,15 @@ class DbxcliGetr:
     os.chdir(local)
     #print("cwd: " + os.getcwd())
     regex = re.compile('^(\S+).*/(.+?)\s*$')
-    proc = subprocess.run(["dbxcli", "ls", "-l", remote], stdout=subprocess.PIPE)
+    dlcmd = ["dbxcli", "ls", "-l", remote]
+    if self.verbosity>=2: print(dlcmd)
+    proc = subprocess.run(dlcmd, stdout=subprocess.PIPE)
     lines = proc.stdout.decode('utf-8').splitlines()
     for line in lines[1:]:
       obj_id, obj_name = regex.match(line).group(1, 2)
       if obj_id == "-":
         os.mkdir(obj_name)
-        if self.verbose: print("Created " + remote+'/'+obj_name)
+        if self.verbosity>=1: print("Created " + remote+'/'+obj_name)
         self.getr(remote+'/'+obj_name, obj_name)
       else:
         if self.verify:
