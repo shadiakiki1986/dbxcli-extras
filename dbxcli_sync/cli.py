@@ -23,8 +23,8 @@ def sync(localdir, dbxdir, verbosity):
 @click.command()
 @click.argument('dbxdir', type=str)
 @click.argument('localdir', type=click.Path(exists=True))
-@click.option('--verify/--no-verify', default=False, help="Verify downloads (download it several times)")
-@click.option('--verbose/--no-verbose', default=False, help="Be verbose")
+@click.option('--verify', is_flag=True, default=False, help="Verify downloads (download it several times)")
+@click.option('--verbose', is_flag=True, default=False, help="Be verbose")
 def getr(dbxdir, localdir, verify, verbose):
     """
     Recursive get

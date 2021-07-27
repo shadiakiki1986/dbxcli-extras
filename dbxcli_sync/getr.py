@@ -39,7 +39,7 @@ def getr(remote, local, verify, verbose):
     if obj_id == "-":
       os.mkdir(obj_name)
       if verbose: print("Created " + remote+'/'+obj_name)
-      getr(remote+'/'+obj_name, obj_name)
+      getr(remote+'/'+obj_name, obj_name, verify, verbose)
     else:
       if verify:
         myhash=None
