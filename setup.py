@@ -10,7 +10,7 @@ def read(fname):
 # and https://packaging.python.org/tutorials/packaging-projects/
 setup(
     name='dbxcli_sync',
-    version="0.0.1",
+    version="0.0.2",
     license="WTFPL",
     author="Shadi Akiki",
     author_email="shadi.akiki@ronininstitute.org",
