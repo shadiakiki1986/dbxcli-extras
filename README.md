@@ -1,6 +1,9 @@
 ## dbxcli-sync
 
-dbxcli sync command that solves https://github.com/dropbox/dbxcli/issues/53
+A CLI that wraps [dbxcli](https://github.com/dropbox/dbxcli/) to solve some long-standing issues:
+
+- https://github.com/dropbox/dbxcli/issues/53
+- https://github.com/dropbox/dbxcli/issues/60
 
 
 ## Install
@@ -10,7 +13,7 @@ First install [dbxcli](https://github.com/dropbox/dbxcli/)
 Then install this package:
 
 ```
-pip3 install git+https://github.com/shadiakiki1986/dbxcli-sync.git@v0.0.1
+pip3 install git+https://github.com/shadiakiki1986/dbxcli-sync.git@v0.0.2
 ```
 
 ## Usage
