@@ -9,8 +9,8 @@ def read(fname):
 # follow https://github.com/awslabs/git-remote-codecommit/blob/master/setup.py
 # and https://packaging.python.org/tutorials/packaging-projects/
 setup(
-    name='dbxcli_sync',
-    version="0.0.2",
+    name='dbxcli_extras',
+    version="0.0.3",
     license="WTFPL",
     author="Shadi Akiki",
     author_email="shadi.akiki@ronininstitute.org",
@@ -27,7 +27,7 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        dbxcli_sync=dbxcli_sync.cli:cli
+        dbxcli_extras=dbxcli_extras.cli:cli
     ''',
 )
 

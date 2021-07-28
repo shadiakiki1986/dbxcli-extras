@@ -1,3 +1,8 @@
+## v0.0.3 (2021-07-28)
+
+- rename package to dbxcli-extras
+
+
 ## v0.0.2 (2021-07-27)
 
 - factor out the sync command and make it a subcommand in preparation to add recursive get
