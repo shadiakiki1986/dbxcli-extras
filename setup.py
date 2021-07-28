@@ -15,8 +15,11 @@ setup(
     author="Shadi Akiki",
     author_email="shadi.akiki@ronininstitute.org",
     url='https://www.teamshadi.net',
-    description="dbxcli sync command that solves https://github.com/dropbox/dbxcli/issues/53",
-    long_description = 'dbxcli sync command that solves https://github.com/dropbox/dbxcli/issues/53',
+
+    # Follow similar description and package name to git-extras
+    # https://github.com/tj/git-extras
+    description="dbxcli utilities: sync, recursive get",
+    long_description = 'dbxcli utilities: sync, recursive get',
     long_description_content_type="text/markdown",
 
     packages=find_packages(),

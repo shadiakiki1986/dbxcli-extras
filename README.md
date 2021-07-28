@@ -1,14 +1,14 @@
 ## dbxcli-extras
 
-A CLI that wraps [dbxcli](https://github.com/dropbox/dbxcli/) to solve some long-standing issues:
+[dbxcli](https://github.com/dropbox/dbxcli/) utilities:
 
-- Missing sync command: https://github.com/dropbox/dbxcli/issues/53
-- Missing recursive get command: https://github.com/dropbox/dbxcli/issues/60
+- sync: https://github.com/dropbox/dbxcli/issues/53
+- recursive get: https://github.com/dropbox/dbxcli/issues/60
 
 
 ## Install
 
-First install [dbxcli](https://github.com/dropbox/dbxcli/)
+First, install [dbxcli](https://github.com/dropbox/dbxcli/)
 
 Then install this package:
 
@@ -19,7 +19,10 @@ pip3 install git+https://github.com/shadiakiki1986/dbxcli-extras.git@v0.0.3
 ## Usage
 
 ```
+# syncronize a local directory with a remote directory in dropbox
 dbxcli_extras sync [--verbosity={0,1,2}] <localdir> <dbxdir>
+
+# recursive get
 dbxcli_extras getr [--verbosity={0,1,2}] [--verify] <dbxdir> <localdir>
 ```
 
