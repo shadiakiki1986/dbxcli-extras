@@ -9,9 +9,9 @@ class DropboxAPI:
     self.verbosity=verbosity
 
 
-  def my_run(self, cx):
+  def my_run(self, cx, stdout=subprocess.DEVNULL):
     if self.verbosity>=2: print(f"Command: {' '.join(cx)}")
-    return subprocess.run(cx, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    return subprocess.run(cx, stdout=stdout, stderr=subprocess.DEVNULL)
 
 
   def exists(self, filename_remote):
@@ -47,7 +47,7 @@ class DropboxAPI:
     regex = re.compile('^(\S+).*/(.+?)\s*$')
     dlcmd = ["dbxcli", "ls", "-l", fr_dir]
     if self.verbosity>=2: print(dlcmd)
-    proc = self.my_run(dlcmd)
+    proc = self.my_run(dlcmd, stdout=subprocess.PIPE)
     lines = proc.stdout.decode('utf-8').splitlines()
     for line in lines[1:]:
       obj_id, obj_name = regex.match(line).group(1, 2)

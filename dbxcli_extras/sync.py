@@ -29,6 +29,7 @@ class DbxcliSync:
 
     if filename_remote.replace(fr_dir+"/", "") in self.cache_dbx_dirls.get(fr_dir, []):
       # file already exists in dropbox
+      if self.verbosity>=1: print(f"File already exists in dropbox: {filename_remote}")
       return "exists in cache"
 
     # Update: it turns out that revs still shows a non-zero result for deleted files,
