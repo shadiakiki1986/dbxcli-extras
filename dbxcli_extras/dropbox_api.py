@@ -47,7 +47,7 @@ class DropboxAPI:
     regex = re.compile('^(\S+).*/(.+?)\s*$')
     dlcmd = ["dbxcli", "ls", "-l", fr_dir]
     if self.verbosity>=2: print(dlcmd)
-    proc = subprocess.run(dlcmd, stdout=subprocess.PIPE)
+    proc = self.my_run(dlcmd)
     lines = proc.stdout.decode('utf-8').splitlines()
     for line in lines[1:]:
       obj_id, obj_name = regex.match(line).group(1, 2)
