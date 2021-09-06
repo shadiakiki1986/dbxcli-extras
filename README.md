@@ -2,7 +2,7 @@
 
 [dbxcli](https://github.com/dropbox/dbxcli/) utilities:
 
-- sync: https://github.com/dropbox/dbxcli/issues/53
+- sync (local to remote): https://github.com/dropbox/dbxcli/issues/53
 - recursive get: https://github.com/dropbox/dbxcli/issues/60
 
 
@@ -13,7 +13,7 @@ First, install [dbxcli](https://github.com/dropbox/dbxcli/)
 Then install this package:
 
 ```
-pip3 install git+https://github.com/shadiakiki1986/dbxcli-extras.git@v0.0.3
+pip3 install git+https://github.com/shadiakiki1986/dbxcli-extras.git@v0.0.4
 ```
 
 ## Usage
