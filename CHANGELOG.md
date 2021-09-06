@@ -1,3 +1,8 @@
+## v0.0.4 (2021-09-06)
+
+- faster sync by doing ls on directory and caching list of files instead of ls one file at a time
+
+
 ## v0.0.3 (2021-07-28)
 
 - rename package to dbxcli-extras

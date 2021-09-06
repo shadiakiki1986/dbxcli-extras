@@ -4,6 +4,7 @@ import os
 import subprocess
 import re
 import hashlib
+from .dropbox_api import DropboxAPI
 
 
 def md5(f):
@@ -21,6 +22,7 @@ class DbxcliGetr:
   def __init__(self, verify, verbosity):
     self.verify = verify
     self.verbosity = verbosity
+    self.dbxapi = DropboxAPI(verbosity)
 
   def _get(self, remote):
     dlcmd = ["dbxcli", "get", remote]
@@ -38,14 +40,8 @@ class DbxcliGetr:
     localcwd = os.getcwd()
     os.chdir(local)
     #print("cwd: " + os.getcwd())
-    regex = re.compile('^(\S+).*/(.+?)\s*$')
-    dlcmd = ["dbxcli", "ls", "-l", remote]
-    if self.verbosity>=2: print(dlcmd)
-    proc = subprocess.run(dlcmd, stdout=subprocess.PIPE)
-    lines = proc.stdout.decode('utf-8').splitlines()
-    for line in lines[1:]:
-      obj_id, obj_name = regex.match(line).group(1, 2)
-      if obj_id == "-":
+    for obj_isdir, obj_name in self.dbxapi.ls_dir(remote):
+      if obj_isdir:
         os.mkdir(obj_name)
         if self.verbosity>=1: print("Created " + remote+'/'+obj_name)
         self.getr(remote+'/'+obj_name, obj_name)
