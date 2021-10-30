@@ -1,3 +1,11 @@
+## v0.0.5 (2021-10-30)
+
+- sync compares content hash on top of file existence
+  - New dependency on dropbox python sdk
+  - Ref https://www.dropbox.com/developers/reference/content-hash
+  - Ref https://github.com/dropbox/dropbox-sdk-python/blob/fc72aaa95fa474171c3b4a42ee08f06841e65108/dropbox/base.py#L1473
+
+
 ## v0.0.4 (2021-09-06)
 
 - faster sync by doing ls on directory and caching list of files instead of ls one file at a time

@@ -21,20 +21,21 @@ class DbxcliSync:
     # First, check in cache of dir listings
     fr_dir = os.path.dirname(filename_remote)
     if fr_dir not in self.cache_dbx_dirls.keys():
-      ld_l = list(self.dbxapi.ls_dir(fr_dir))
-      ld_l = [x[1] for x in ld_l if not x[0]] # filename only, no dirs
-      self.cache_dbx_dirls[fr_dir] = ld_l
+      self.cache_dbx_dirls[fr_dir] = [obj_name for is_dir, _, obj_name in self.dbxapi.ls_dir(fr_dir) if not is_dir]
 
-
-    if filename_remote.replace(fr_dir+"/", "") in self.cache_dbx_dirls.get(fr_dir, []):
+    fr_key = filename_remote.replace(fr_dir+"/", "")
+    if fr_key in self.cache_dbx_dirls.get(fr_dir, []):
       # file already exists in dropbox
-      if self.verbosity>=1: print(f"File already exists in dropbox: {filename_remote}")
-      return "exists in cache"
+      if self.dbxapi.same_hash(filename_local, filename_remote):
+        if self.verbosity>=1: print(f"File already exists in dropbox and hash is the same (checked from cache): {filename_remote}")
+        return "exists in cache"
 
     # Update: it turns out that revs still shows a non-zero result for deleted files,
     # so using ls instead
     if self.dbxapi.exists(filename_remote):
-      return "exists"
+      if self.dbxapi.same_hash(filename_local, filename_remote):
+        if self.verbosity>=1: print(f"File already exists in dropbox and hash is the same (checked local file): {filename_remote}")
+        return "exists"
 
     if self.dbxapi.put(filename_local, filename_remote):
       return "uploaded"

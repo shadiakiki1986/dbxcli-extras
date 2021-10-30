@@ -27,6 +27,7 @@ setup(
     install_requires=[
       "click==7.1.2",
       "tqdm==4.56.0",
+      "dropbox==11.22.0",
     ],
     entry_points='''
         [console_scripts]

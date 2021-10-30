@@ -2,6 +2,8 @@ import subprocess
 import re
 import click
 import sys
+from pathlib import Path
+import os
 
 class DropboxAPI:
   """
@@ -9,6 +11,11 @@ class DropboxAPI:
   """
   def __init__(self, verbosity: int):
     self.verbosity=verbosity
+
+    import json
+    with open(os.path.join(Path.home(), ".config/dbxcli/auth.json"), "r") as fh: token=json.load(fh)[""]["personal"]
+    import dropbox
+    self.dbx = dropbox.Dropbox(token)
 
 
   def my_run(self, cx, stdout=subprocess.DEVNULL, nonzero_ok=False):
@@ -24,14 +31,11 @@ class DropboxAPI:
 
 
   def exists(self, filename_remote):
-    # Update: it turns out that revs still shows a non-zero result for deleted files,
-    # so using ls instead
-    c1_revs = ["dbxcli", "ls", filename_remote]
-    r1 = self.my_run(c1_revs, nonzero_ok=True)
-    if r1.returncode==0:
-      if self.verbosity>=1: print(f"File already exists in dropbox: {filename_remote}")
-      return True
-    return False
+    l = list(self.ls_dir(filename_remote))
+    assert len(l) in [0,1]
+    if len(l)==0: return False
+    if self.verbosity>=1: print(f"File already exists in dropbox: {filename_remote}")
+    return True
 
 
   def put(self, filename_local, filename_remote):
@@ -61,4 +65,31 @@ class DropboxAPI:
     lines = proc.stdout.decode('utf-8').splitlines()
     for line in lines[1:]:
       obj_id, obj_name = regex.match(line).group(1, 2)
-      yield obj_id=="-", obj_name
+      yield obj_id=="-", obj_id, obj_name
+
+
+  def hash_local(self, fn):
+    from .dropbox_content_hasher import DropboxContentHasher
+    hasher = DropboxContentHasher()
+    with open(fn, 'rb') as f:
+      while True:
+        chunk = f.read(1024)  # or whatever chunk size you want
+        if len(chunk) == 0: break
+        hasher.update(chunk)
+    return hasher.hexdigest()
+
+
+  def hash_remote(self, fn):
+    md = self.dbx.files_get_metadata(fn)
+    #import os
+    #mtime = os.path.getmtime(fullname)
+    #mtime_dt = datetime.datetime(*time.gmtime(mtime)[:6])
+    #size = os.path.getsize(fullname)
+    return md.content_hash
+
+
+  def same_hash(self, filename_local, filename_remote):
+      hash_r = self.hash_remote(filename_remote)
+      hash_l = self.hash_local(filename_local)
+      if self.verbosity>=1: print(f"Comparing hashes: '{hash_r}' =?= '{hash_l}'")
+      return hash_r == hash_l

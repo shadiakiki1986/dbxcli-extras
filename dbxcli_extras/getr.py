@@ -40,7 +40,7 @@ class DbxcliGetr:
     localcwd = os.getcwd()
     os.chdir(local)
     #print("cwd: " + os.getcwd())
-    for obj_isdir, obj_name in self.dbxapi.ls_dir(remote):
+    for obj_isdir, _, obj_name in self.dbxapi.ls_dir(remote):
       if obj_isdir:
         os.mkdir(obj_name)
         if self.verbosity>=1: print("Created " + remote+'/'+obj_name)

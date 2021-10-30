@@ -41,8 +41,12 @@ pip3 install pew
 pew new dbxcli_extras
 pip3 install -e .
 
+# Test that sync should check hash
 mkdir d1
-touch d1/f1
+date > d1/f1
 python3 -m dbxcli_extras.cli sync d1 d1
+date > d1/f1
+python3 -m dbxcli_extras.cli sync d1 d1
+
 dbxcli rm d1
 ```
