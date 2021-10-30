@@ -1,7 +1,7 @@
 from pathlib import Path
 import os
 from tqdm.auto import tqdm
-from .dropbox_api import DropboxAPI
+from .dropbox_api import DropboxAPI, drop_root
 
 
 def morify(l):
@@ -67,7 +67,7 @@ class DbxcliSync:
 
     # check for deleted files locally and delete them remotely
     str_l_remote = list(self.dbxapi.rglob_all_remote(self.dbxdir))
-    str_l_local  = [self.dbxapi.drop_root_local(str(x)) for x in path_l]
+    str_l_local  = [drop_root(self.localdir, str(x)) for x in path_l]
     if self.verbosity>=2:
         print(f"Remote files: {morify(str_l_remote)}")
         print(f"Local  files: {morify(str_l_local)}")

@@ -1,9 +1,14 @@
 import subprocess
-import re
 import click
 import sys
 from pathlib import Path
 import os
+
+
+import re
+def drop_root(d, x):
+  return re.sub(fr"^{d}", "", x)
+
 
 class DropboxAPI:
   """
@@ -68,14 +73,6 @@ class DropboxAPI:
       yield obj_id=="-", obj_id, obj_name
 
 
-  def drop_root_remote(self, x):
-    return self._drop_root(self.dbxdir, x)
-
-  def drop_root_local(self, x):
-    return self._drop_root(self.localdir, x)
-
-  def _drop_root(self, d, x):
-    return re.sub(fr"^{d}", "", x)
 
 
   def rglob_all_remote(self, dbxdir):
@@ -84,7 +81,7 @@ class DropboxAPI:
       import re
       while True:
         for e in l.entries:
-            n_full = self.drop_root_remote(e.path_display) # (e.name, , e.path_display, e.path_lower)
+            n_full = drop_root(dbxdir, e.path_display) # (e.name, , e.path_display, e.path_lower)
             if not n_full: continue
             yield n_full
 
