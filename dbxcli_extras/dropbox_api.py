@@ -35,7 +35,7 @@ class DropboxAPI:
     l = list(self.ls_dir(filename_remote))
     assert len(l) in [0,1]
     if len(l)==0: return False
-    if self.verbosity>=1: print(f"File already exists in dropbox: {filename_remote}")
+    #if self.verbosity>=1: print(f"File already exists in dropbox: {filename_remote}")
     return True
 
 
@@ -68,13 +68,23 @@ class DropboxAPI:
       yield obj_id=="-", obj_id, obj_name
 
 
+  def drop_root_remote(self, x):
+    return self._drop_root(self.dbxdir, x)
+
+  def drop_root_local(self, x):
+    return self._drop_root(self.localdir, x)
+
+  def _drop_root(self, d, x):
+    return re.sub(fr"^{d}", "", x)
+
+
   def rglob_all_remote(self, dbxdir):
       if self.verbosity>=2: print(f"Getting remote rglob(*) for: '{dbxdir}'")
       l = self.dbx.files_list_folder(dbxdir, recursive=True)
       import re
       while True:
         for e in l.entries:
-            n_full = re.sub(fr"^{dbxdir}", "", e.path_display) # (e.name, , e.path_display, e.path_lower)
+            n_full = self.drop_root_remote(e.path_display) # (e.name, , e.path_display, e.path_lower)
             if not n_full: continue
             yield n_full
 

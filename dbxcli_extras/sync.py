@@ -8,6 +8,7 @@ def morify(l):
   return ", ".join(l[:5]) + ("" if len(l)<=5 else f" (and {len(l)-5} more)")
 
 
+
 class DbxcliSync:
   def __init__(self, localdir: str, dbxdir: str, verbosity: int):
     assert verbosity in [0,1,2]
@@ -21,7 +22,9 @@ class DbxcliSync:
 
 
   def sync_file(self, filename_local: str):
-    filename_remote = os.path.join(self.dbxdir, filename_local.replace(self.localdir+"/", ""))
+    fnr_noroot = filename_local.replace(self.localdir+"/", "")
+    filename_remote = os.path.join(self.dbxdir, fnr_noroot)
+
 
     # First, check in cache of dir listings
     fr_dir = os.path.dirname(filename_remote)
@@ -32,20 +35,23 @@ class DbxcliSync:
     if fr_key in self.cache_dbx_dirls.get(fr_dir, []):
       # file already exists in dropbox
       if self.dbxapi.same_hash(filename_local, filename_remote):
-        if self.verbosity>=1: print(f"File already exists in dropbox and hash is the same (checked from cache): {filename_remote}")
+        if self.verbosity>=1: print(f"File already exists in dropbox and hash is the same (checked from cache): {fnr_noroot}")
         return "exists in cache"
 
     # Update: it turns out that revs still shows a non-zero result for deleted files,
     # so using ls instead
     if self.dbxapi.exists(filename_remote):
       if self.dbxapi.same_hash(filename_local, filename_remote):
-        if self.verbosity>=1: print(f"File already exists in dropbox and hash is the same (checked local file): {filename_remote}")
+        if self.verbosity>=1: print(f"File already exists in dropbox and hash is the same (checked local file): {fnr_noroot}")
         return "exists"
+      else:
+        if self.verbosity>=1: print(f"File already exists in dropbox but content hash changed (checked local file): {fnr_noroot}")
 
     if self.dbxapi.put(filename_local, filename_remote):
       return "uploaded"
 
     return "error in upload"
+
 
 
   def sync_dir(self):
@@ -61,8 +67,7 @@ class DbxcliSync:
 
     # check for deleted files locally and delete them remotely
     str_l_remote = list(self.dbxapi.rglob_all_remote(self.dbxdir))
-    import re
-    str_l_local  = [re.sub(fr"^{self.localdir}", "", str(x)) for x in path_l]
+    str_l_local  = [self.dbxapi.drop_root_local(str(x)) for x in path_l]
     if self.verbosity>=2:
         print(f"Remote files: {morify(str_l_remote)}")
         print(f"Local  files: {morify(str_l_local)}")
