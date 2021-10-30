@@ -13,7 +13,7 @@ First, install [dbxcli](https://github.com/dropbox/dbxcli/)
 Then install this package:
 
 ```
-pip3 install --user git+https://github.com/shadiakiki1986/dbxcli-extras.git@v0.0.4
+pip3 install --user git+https://github.com/shadiakiki1986/dbxcli-extras.git@v0.0.6
 ```
 
 ## Usage
