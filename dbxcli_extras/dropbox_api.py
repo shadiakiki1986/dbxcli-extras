@@ -74,7 +74,7 @@ class DropboxAPI:
       import re
       while True:
         for e in l.entries:
-            n_full = re.sub(fr"^{dbxdir}", "", e.path_lower) # (e.name, , e.path_display)
+            n_full = re.sub(fr"^{dbxdir}", "", e.path_display) # (e.name, , e.path_display, e.path_lower)
             if not n_full: continue
             yield n_full
 
