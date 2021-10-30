@@ -40,4 +40,9 @@ WTFPL. Check [LICENSE](LICENSE)
 pip3 install pew
 pew new dbxcli_extras
 pip3 install -e .
+
+mkdir d1
+touch d1/f1
+python3 -m dbxcli_extras.cli sync d1 d1
+dbxcli rm d1
 ```

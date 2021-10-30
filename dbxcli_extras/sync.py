@@ -16,8 +16,7 @@ class DbxcliSync:
 
 
   def sync_file(self, filename_local: str):
-    filename_remote = filename_local.replace(self.localdir, self.dbxdir)
-    #filename_remote = os.path.join(self.dbxdir, filename_remote)
+    filename_remote = os.path.join(self.dbxdir, filename_local.replace(self.localdir+"/", ""))
 
     # First, check in cache of dir listings
     fr_dir = os.path.dirname(filename_remote)

@@ -1,5 +1,7 @@
 import subprocess
 import re
+import click
+import sys
 
 class DropboxAPI:
   """
@@ -9,16 +11,23 @@ class DropboxAPI:
     self.verbosity=verbosity
 
 
-  def my_run(self, cx, stdout=subprocess.DEVNULL):
+  def my_run(self, cx, stdout=subprocess.DEVNULL, nonzero_ok=False):
     if self.verbosity>=2: print(f"Command: {' '.join(cx)}")
-    return subprocess.run(cx, stdout=stdout, stderr=subprocess.DEVNULL)
+    rx = subprocess.run(cx, capture_output=True)
+    if rx.returncode==0 or nonzero_ok:
+        return rx
+
+    click.secho(f"Got non-zero return code {rx.returncode} from subcommand. Aborting.", fg="red")
+    click.secho(f"Full command: {cx}", fg="red")
+    click.secho(f"Error: {rx.stderr.decode()}", fg="red")
+    sys.exit(1)
 
 
   def exists(self, filename_remote):
     # Update: it turns out that revs still shows a non-zero result for deleted files,
     # so using ls instead
     c1_revs = ["dbxcli", "ls", filename_remote]
-    r1 = self.my_run(c1_revs)
+    r1 = self.my_run(c1_revs, nonzero_ok=True)
     if r1.returncode==0:
       if self.verbosity>=1: print(f"File already exists in dropbox: {filename_remote}")
       return True
@@ -47,7 +56,8 @@ class DropboxAPI:
     regex = re.compile('^(\S+).*/(.+?)\s*$')
     dlcmd = ["dbxcli", "ls", "-l", fr_dir]
     if self.verbosity>=2: print(dlcmd)
-    proc = self.my_run(dlcmd, stdout=subprocess.PIPE)
+    proc = self.my_run(dlcmd, stdout=subprocess.PIPE, nonzero_ok=True)
+    if proc.returncode!=0: return []
     lines = proc.stdout.decode('utf-8').splitlines()
     for line in lines[1:]:
       obj_id, obj_name = regex.match(line).group(1, 2)
