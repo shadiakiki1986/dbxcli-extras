@@ -1,3 +1,8 @@
+## v0.0.6 (2021-10-30)
+
+- sync can check locally deleted files and remove them on dropbox
+
+
 ## v0.0.5 (2021-10-30)
 
 - sync compares content hash on top of file existence

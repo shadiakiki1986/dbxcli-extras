@@ -8,6 +8,7 @@ import os
 class DropboxAPI:
   """
   Dropbox python API
+  Update 2021-10-30: started using the python sdk and this class will eventually just become a pretty wrapper of it
   """
   def __init__(self, verbosity: int):
     self.verbosity=verbosity
@@ -59,13 +60,26 @@ class DropboxAPI:
     """
     regex = re.compile('^(\S+).*/(.+?)\s*$')
     dlcmd = ["dbxcli", "ls", "-l", fr_dir]
-    if self.verbosity>=2: print(dlcmd)
     proc = self.my_run(dlcmd, stdout=subprocess.PIPE, nonzero_ok=True)
     if proc.returncode!=0: return []
     lines = proc.stdout.decode('utf-8').splitlines()
     for line in lines[1:]:
       obj_id, obj_name = regex.match(line).group(1, 2)
       yield obj_id=="-", obj_id, obj_name
+
+
+  def rglob_all_remote(self, dbxdir):
+      if self.verbosity>=2: print(f"Getting remote rglob(*) for: '{dbxdir}'")
+      l = self.dbx.files_list_folder(dbxdir, recursive=True)
+      import re
+      while True:
+        for e in l.entries:
+            n_full = re.sub(fr"^{dbxdir}", "", e.path_lower) # (e.name, , e.path_display)
+            if not n_full: continue
+            yield n_full
+
+        if not l.has_more: break
+        l = self.dbx.files_list_folder_continue(l.cursor)
 
 
   def hash_local(self, fn):
@@ -80,6 +94,7 @@ class DropboxAPI:
 
 
   def hash_remote(self, fn):
+    if self.verbosity>=2: print(f"Getting remote hash for {fn}")
     md = self.dbx.files_get_metadata(fn)
     #import os
     #mtime = os.path.getmtime(fullname)
@@ -91,5 +106,5 @@ class DropboxAPI:
   def same_hash(self, filename_local, filename_remote):
       hash_r = self.hash_remote(filename_remote)
       hash_l = self.hash_local(filename_local)
-      if self.verbosity>=1: print(f"Comparing hashes: '{hash_r}' =?= '{hash_l}'")
+      if self.verbosity>=2: print(f"Comparing hashes: '{hash_r}' =?= '{hash_l}'")
       return hash_r == hash_l

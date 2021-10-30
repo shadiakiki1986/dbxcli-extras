@@ -4,11 +4,16 @@ from tqdm.auto import tqdm
 from .dropbox_api import DropboxAPI
 
 
+def morify(l):
+  return ", ".join(l[:5]) + ("" if len(l)<=5 else f" (and {len(l)-5} more)")
+
+
 class DbxcliSync:
   def __init__(self, localdir: str, dbxdir: str, verbosity: int):
     assert verbosity in [0,1,2]
     # use str(Path(...)) for some cleanup
     self.localdir = str(Path(localdir))
+    if dbxdir[0]!="/": dbxdir="/"+dbxdir
     self.dbxdir = str(Path(dbxdir))
     self.verbosity = verbosity
     self.cache_dbx_dirls = {}
@@ -46,10 +51,25 @@ class DbxcliSync:
   def sync_dir(self):
     path_l = Path(self.localdir).rglob('*')
     path_l = sorted(path_l)
-    if self.verbosity==0: path_l = tqdm(path_l)
+    if self.verbosity==0: path_l = tqdm(path_l, desc="New/modified local files")
     for path_i in path_l:
       if not path_i.is_file(): continue
       filename = str(path_i)
       r3 = self.sync_file(filename)
       if self.verbosity==2: print(f"{r3}: {filename}")
       #if r3=="uploaded": break
+
+    # check for deleted files locally and delete them remotely
+    str_l_remote = list(self.dbxapi.rglob_all_remote(self.dbxdir))
+    import re
+    str_l_local  = [re.sub(fr"^{self.localdir}", "", str(x)) for x in path_l]
+    if self.verbosity>=2:
+        print(f"Remote files: {morify(str_l_remote)}")
+        print(f"Local  files: {morify(str_l_local)}")
+
+    fdel_l = sorted(list(set(str_l_remote).difference(set(str_l_local))))
+    if self.verbosity==0: fdel_l = tqdm(fdel_l, desc="Locally deleted files")
+    for fdel_i in fdel_l:
+        fdel_i = self.dbxdir + fdel_i
+        if self.verbosity>=1: print(f"Deleting remote file: '{fdel_i}'")
+        self.dbxapi.dbx.files_delete(fdel_i)
