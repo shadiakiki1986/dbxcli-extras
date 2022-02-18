@@ -20,7 +20,7 @@ pip3 install --user git+https://github.com/shadiakiki1986/dbxcli-extras.git@v0.0
 
 ```
 # syncronize a local directory with a remote directory in dropbox
-dbxcli_extras sync [--verbosity={0,1,2}] <localdir> <dbxdir>
+dbxcli_extras sync [--verbosity={0,1,2}] [--start-from=<path>] <localdir> <dbxdir>
 
 # recursive get
 dbxcli_extras getr [--verbosity={0,1,2}] [--verify] <dbxdir> <localdir>
