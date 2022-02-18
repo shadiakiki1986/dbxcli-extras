@@ -1,3 +1,8 @@
+## v0.0.7 (2022-02-18)
+
+- sync has parameter `--start-from` to support starting from a specific filename instead of from the start (issue #6)
+
+
 ## v0.0.6 (2021-10-30)
 
 - sync can check locally deleted files and remove them on dropbox

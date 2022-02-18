@@ -11,13 +11,14 @@ def cli():
 @click.argument('localdir', type=click.Path(exists=True))
 @click.argument('dbxdir', type=str)
 @click.option('--verbosity', default=0, help="Verbosity level: 0, 1, 2")
-def sync(localdir, dbxdir, verbosity):
+@click.option('--start-from', default="", help="Files are sorted before sync. Use this field to start from a particular file instead of from the beginning.")
+def sync(localdir, dbxdir, verbosity, start_from):
     """
     sync local folder with remote dropbox folder
     Solves https://github.com/dropbox/dbxcli/issues/53
     """
     dcs = DbxcliSync(localdir, dbxdir, verbosity)
-    dcs.sync_dir()
+    dcs.sync_dir(start_from)
 
 
 @click.command()

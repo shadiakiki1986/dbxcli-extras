@@ -10,11 +10,10 @@ def read(fname):
 # and https://packaging.python.org/tutorials/packaging-projects/
 setup(
     name='dbxcli_extras',
-    version="0.0.6",
+    version="0.0.7",
     license="WTFPL",
     author="Shadi Akiki",
-    author_email="shadi.akiki@ronininstitute.org",
-    url='https://www.teamshadi.net',
+    url='https://www.github.com/shadiakiki1986/dbxcli-extras',
 
     # Follow similar description and package name to git-extras
     # https://github.com/tj/git-extras

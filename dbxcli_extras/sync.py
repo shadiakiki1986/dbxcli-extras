@@ -2,6 +2,8 @@ from pathlib import Path
 import os
 from tqdm.auto import tqdm
 from .dropbox_api import DropboxAPI, drop_root
+import click
+import sys
 
 
 def morify(l):
@@ -54,9 +56,18 @@ class DbxcliSync:
 
 
 
-  def sync_dir(self):
+  def sync_dir(self, start_from):
     path_l = Path(self.localdir).rglob('*')
     path_l = sorted(path_l)
+    if start_from:
+      start_from = Path(start_from)
+      if start_from not in path_l:
+        click.secho(f"File passed as start_from={str(start_from)} does not exist.", fg="red")
+        sys.exit(1)
+
+      start_index = path_l.index(start_from)
+      path_l = path_l[start_index:]
+
     if self.verbosity==0: path_l = tqdm(path_l, desc="New/modified local files")
     for path_i in path_l:
       if not path_i.is_file(): continue
