@@ -10,7 +10,7 @@ def read(fname):
 # and https://packaging.python.org/tutorials/packaging-projects/
 setup(
     name='dbxcli_extras',
-    version="0.0.7",
+    version="0.0.8",
     license="WTFPL",
     author="Shadi Akiki",
     url='https://www.github.com/shadiakiki1986/dbxcli-extras',
