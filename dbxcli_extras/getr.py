@@ -37,6 +37,7 @@ class DbxcliGetr:
 
 
   def getr(self, remote, local):
+    if remote.endswith('/'): remote=remote[:-1] # even case of "/"
     localcwd = os.getcwd()
     os.chdir(local)
     #print("cwd: " + os.getcwd())
