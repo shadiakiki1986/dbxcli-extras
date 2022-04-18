@@ -5,6 +5,10 @@
 - sync (local to remote): https://github.com/dropbox/dbxcli/issues/53
 - recursive get: https://github.com/dropbox/dbxcli/issues/60
 
+Related:
+- https://github.com/dropbox/dbxcli/
+- https://rclone.org/
+
 
 ## Install
 
